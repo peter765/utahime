@@ -1,59 +1,31 @@
-# @discordjs/voice
+# Music Bot Example
 
-<p>
-	<a href="https://discord.gg/djs"><img src="https://img.shields.io/discord/222078108977594368?color=5865F2&logo=discord&logoColor=white" alt="Discord server" /></a>
-	<a href="https://www.npmjs.com/package/@discordjs/voice"><img src="https://img.shields.io/npm/v/@discordjs/voice.svg?maxAge=3600" alt="NPM version" /></a>
-	<a href="https://www.npmjs.com/package/@discordjs/voice"><img src="https://img.shields.io/npm/dt/@discordjs/voice.svg?maxAge=3600" alt="NPM downloads" /></a>
-	<a href="https://github.com/discordjs/voice/actions"><img src="https://github.com/discordjs/voice/actions/workflows/test.yml/badge.svg" alt="Build status" /></a>
-	<a href="https://codecov.io/gh/discordjs/voice"><img src="https://codecov.io/gh/discordjs/voice/branch/main/graph/badge.svg?token=u7oQ23UoxX" alt="Test coverage"/></a>
-	<a href="https://www.patreon.com/discordjs"><img src="https://img.shields.io/badge/donate-patreon-F96854.svg" alt="Patreon" /></a>
-</p>
+This is an example of how to create a music bot using @discordjs/voice alongside [discord.js](https://github.com/discordjs/discord.js).
 
-## About
+The focus of this example is on how to create a robust music system using this library. The example explores error recovery, reconnection logic and implementation of a queue that won't lock up.
 
-An implementation of the Discord Voice API for Node.js, written in TypeScript.
+If you're looking to make your own music bot that is fairly simple, this example is a great place to start.
 
-**Features:**
+## Usage
 
-- Send and receive* audio in Discord voice-based channels
-- A strong focus on reliability and predictable behaviour
-- Horizontal scalability and libraries other than [discord.js](https://discord.js.org/) are supported with custom adapters
-- A robust audio processing system that can handle a wide range of audio sources
+```bash
+# Clone the main repository, and then run:
+$ npm install
+$ npm run build
 
-\**Audio receive is not documented by Discord so stable support is not guaranteed*
+# Open this example and install dependencies
+$ cd examples/music-bot
+$ npm install
 
-**Useful links:**
+# Set a bot token (see auth.example.json)
+$ nano auth.json
 
-- [Documentation](https://discordjs.github.io/voice)
-- [Examples](https://github.com/discordjs/voice/tree/main/examples)
-- [GitHub Discussions](https://github.com/discordjs/voice/discussions)
-- [Discord.js Server](https://discord.gg/djs)
-- [Repository](https://github.com/discordjs/voice)
+# Start the bot!
+$ npm start
+```
 
-## Dependencies
+## Code structure
 
-This library has several optional dependencies to support a variety
-of different platforms. Install one dependency from each of the
-categories shown below. The dependencies are listed in order of
-preference for performance. If you can't install one of the options,
-try installing another.
+The bot code has been separated from the code that is specific to @discordjs/voice as much as possible. Within `src/music`, you will find code that is specific to this library and you can take inspiration from this when building your own music system.
 
-**Encryption Libraries (npm install):**
-
-- `sodium`: ^3.0.2
-- `tweetnacl`: ^1.0.3
-- `libsodium-wrappers`: ^0.7.9
-
-**Opus Libraries (npm install):**
-
-- `@discordjs/opus`: ^0.4.0
-- `opusscript`: ^0.0.7
-
-**FFmpeg:**
-
-- [`FFmpeg`](https://ffmpeg.org/) (installed and added to environment)
-- `ffmpeg-static`: ^4.2.7 (npm install)
-
-## Contribution
-
-See [Contributing Guide](https://github.com/discordjs/voice/blob/main/.github/CONTRIBUTING.md).
+On the other hand, `src/bot.ts` is discord.js-specific code that interacts with the music system above, as well as handling user commands given on Discord. This example uses a development build of Discord.js that supports slash commands.

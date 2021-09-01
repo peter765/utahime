@@ -15,8 +15,17 @@
 		"outDir": "dist",
 		"incremental": true,
 		"esModuleInterop": true,
-		"skipLibCheck": true
+		"skipLibCheck": true,
+		"baseUrl": ".",
+		"outDir": "dist",
+		"rootDir": "src",
+		"paths": {
+			"@discordjs/opus": ["./node_modules/@discordjs/opus"],
+			"sodium": ["./node_modules/sodium"],
+			"libsodium-wrappers": ["./node_modules/libsodium-wrappers"],
+			"tweetnacl": ["./node_modules/tweetnacl"]
+		}
 	},
 	"include": ["src/**/*.ts"],
-	"exclude": ["src/**/__tests__"]
+	"exclude": [""]
 }
