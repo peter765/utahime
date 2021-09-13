@@ -9,7 +9,9 @@ import {
 	VoiceConnectionStatus,
 } from '@discordjs/voice';
 import { Track } from './track';
+import { shuffle } from '../util/array';
 import { promisify } from 'util';
+import ytpl = require('ytpl');
 
 const wait = promisify(setTimeout);
 
@@ -121,6 +123,48 @@ export class MusicSubscription {
 	}
 
 	/**
+	 * Shuffle all songs in the queue
+	 */
+	public shuffle() {
+		shuffle(this.queue);
+	}
+
+	/**
+	 * Clear all songs from the queue
+	 */
+	public clear() {
+		this.queue = [];
+	}
+
+	/**
+	 * Queue a playlist
+	 */
+	public async queuePlaylist(playlistURL: string, interaction: any): Promise<number>{
+		const songs = await this.retrieveYoutubePlaylist(playlistURL);
+		const tracks = songs.map((song) => {
+			// create Track object
+			return Track.from(song.shortUrl, {
+				onStart() {
+					interaction.followUp({ content: `Now playing: ${song.title}: \`${song.shortUrl}\``, ephemeral: true }).catch(console.warn);
+				},
+				onFinish() {
+					interaction.followUp({ content: 'Now finished!', ephemeral: true }).catch(console.warn);
+				},
+				onError(error) {
+					console.warn(error);
+					interaction.followUp({ content: `Error: ${error.message}`, ephemeral: true }).catch(console.warn);
+				},
+			})
+		}) 
+		shuffle(this.queue);
+		for (const track of tracks) {
+			this.queue.push(await track);
+		}
+		this.processQueue();
+		return songs.length;
+	}
+
+	/**
 	 * Attempts to play a Track from the queue
 	 */
 	private async processQueue(): Promise<void> {
@@ -144,5 +188,14 @@ export class MusicSubscription {
 			this.queueLock = false;
 			return this.processQueue();
 		}
+	}
+
+	/**
+	 * Attempts to retrieve info from youtube playlist
+	 */
+	private async retrieveYoutubePlaylist(url: string) {
+		let response = await ytpl(url, {limit:2000} ); // Set max to 1000 songs, 100 per page
+		const songURLs = response.items;
+		return songURLs;
 	}
 }

@@ -40,6 +40,14 @@ export class Track implements TrackData {
 		this.onError = onError;
 	}
 
+	public getUrl(): String {
+		return this.url;
+	}
+
+	public getTitle(): String {
+		return this.title;
+	}
+
 	/**
 	 * Creates an AudioResource from this Track.
 	 */
